@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- namespace:接口的权限定名 --> 
+<mapper namespace="com.wxc.mapper.ZhiwuMapper">
+ 
+   <!-- id:接口中要实现的方法名称必须一致 -->
+    <select id="getlist" resultType="com.wxc.entity.Zhiwu">
+       select * from zhiwu z left join type t on z.tid=t.tid
+       <where>
+         <if test="zhiwu.zname!=null and zhiwu.zname!=''">
+           and z.zname like concat('%',#{zhiwu.zname},'%')
+         </if>
+       </where>
+       limit #{page},#{rows}
+   </select> 
+   <select id="count" resultType="int">
+     select count(*) from zhiwu z
+     <where>
+         <if test="zhiwu.zname!=null and zhiwu.zname!=''">
+           and z.zname like concat('%',#{zhiwu.zname},'%')
+         </if>
+       </where>
+   </select>
+   
+   <insert id="add">
+     insert into zhiwu (zname,miaoshu,tid) values (#{zname},#{miaoshu},#{tid})
+   </insert>
+   
+   <select id="getzhiwu" resultType="com.wxc.entity.Zhiwu">
+     select * from zhiwu where zid=#{zid}
+   </select>
+   <update id="update">
+     update zhiwu set zname=#{zname},miaoshu=#{miaoshu},tid=#{tid} where zid=#{zid}
+   </update>
+   
+   <delete id="del">
+     delete from zhiwu where zid=#{zid}
+   </delete>
+   <delete id="delete">
+     delete from zhiwu where zid in
+   <foreach collection="array" open="(" separator="," close=")" item="cc">
+     #{cc}
+   </foreach>
+   </delete>
+   
+   
+  
+   
+</mapper>  
